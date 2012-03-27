@@ -1,0 +1,92 @@
+Building a simple executable for Linux
+
+  This example illustrates how to build a Hello World applicatin for a Linux target.
+  
+* Project structure
+
+  The default C/C++ project structure follows the standard Maven layout. Instead of using e.g. <<src/main/java>>, the plugin expects to find one <<cpp>> directory and one <<include>> directory, like so:  
+
++---------------------------------------------------
++- src/
+  +- main/
+  | +- cpp/
+  | +- include/
+  +- test/
+    +- cpp/
+    +- include/
++----------------------------------------------------
+
+  Both <<cpp>> and <<include>> may contain any depth of subdirectories (only the <<include>> directory root will be present as a -I directive at compilation however, so any subdirectory structure shall therefore be part of the #include directive). Placing our HelloWorld.cc in the <<cpp>> directory means it will be picked up and compiled by the plugin.
+
+* Plugin configuration
+  
+  In the POM we'll start by setting the packaging type to <<car>>. We then configure the plugin:
+  
++---------------------------------------------------
+<build>
+  <plugins>
+    <plugin>
+      <artifactId>cpp-compiler-maven-plugin</artifactId>
+      <groupId>com.ericsson.tools.cpp</groupId>
+      <version>1.0.0</version>
+      <configuration>
+        <targetEnvironments>linux_32,linux_64</targetEnvironments>
+        <executables>
+          <executable>
+            <name>hello</name>
+          </executable>
+        </executables>
+      </configuration>
+    </plugin>
+  </plugins>
+</build>  
++---------------------------------------------------
+
+  There are two things to note here:
+  The <<targetEnvironments>> parameter is a comma separated list of targets to build for. In this case we'll build for 32-bit and 64-bit Linux.
+  The <<executables>> parameter is a map of executables per platform. In this case we simply tell it to create an executable named <<hello>>. By default it will be created for all targets, and one and only one entry point will be expected in the default pattern of <<src/main/cpp/*.cpp>>.  
+
+* Bundle configuration
+
+  All target specific compilation and linking logic resides in Bundles. In order to build for any target environment the appropriate Bundle needs to be declared. In this case we'll use the <<cpp-linux-compiler>> Bundle. To make it available to the plugin we add it as a plugin dependency:  
+
++---------------------------------------------------
+<plugin>
+  <artifactId>cpp-compiler-maven-plugin</artifactId>
+  ...
+  <dependencies>
+    <dependency>
+      <groupId>com.ericsson.tools.cpp</groupId>
+      <artifactId>cpp-linux-compiler</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+  </dependencies>
+</plugin>
++----------------------------------------------------
+
+* Dependencies configuration
+
+  Dependencies work like any other Maven dependency, except you need to specify the <<type>>. If you want more than just headers, you need to specify a separate dependency with a <<classifier>> of <<static>>, <<shared>> or <<executables>>:
+
++---------------------------------------------------
+<dependencies>
+  <dependency>
+    <groupId>com.mycompany.mygroup</groupId>
+    <artifactId>mydependency</artifactId>
+    <version>1.2.3</version>
+    <type>car</type>
+  </dependency>
+  <dependency>
+    <groupId>com.mycompany.mygroup</groupId>
+    <artifactId>mydependency</artifactId>
+    <version>1.2.3</version>
+    <type>car</type>
+    <classifier>static</classifier>
+  </dependency>
+</dependencies>
++---------------------------------------------------
+
+* Executing Maven
+
+  You're now ready to build your application! Both compilation and linking of production code (located in <<main>>) is done in the <<compile>> goal, which is bound to the <<compile>> phase in the default <<car>> lifecycle.
+  In other words, running <<mvn compile>> will get you your executables.    

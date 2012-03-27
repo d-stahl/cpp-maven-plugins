@@ -1,0 +1,18 @@
+<faqs xmlns="http://maven.apache.org/FML/1.0.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/FML/1.0.1 http://maven.apache.org/xsd/fml-1.0.1.xsd" title="Frequently Asked Questions">
+	<part id="General">
+		<faq id="Why another C/C++ plugin?">
+			<question>Why another C/C++ plugin?</question>
+			<answer>
+				<p>The C/C++ plugin suite (cpp-compiler, cpp-tester and car plugins) were originally developed by Ericsson for two main reasons.</p>
+				<p>1. Developers were unhappy with existing Maven plugins. It was felt that project configuration was verbose and unintuitive, but above all performance was unacceptable. Developers started writing Boost.Build scripts just to get quicker incremental builds and thereby shorter unit test feedback loops. With the desire to get away from this problem of multiple home-grown build scripts being one of the driving factors behind Maven adoption in the first place, this situation was deemed untenable. People started asking themselves, why can't we write a Maven plugin that's just as fast as Boost.Build?</p>
+				<p>2. A diverse product line supporting a multitude of target environment - some more exotic than others - the need for easily configured and maintained multi-target build support was requested. A Maven plugin built around multi-target handling as one of its key concepts was therefore conceived.</p>
+			</answer>
+		</faq>
+		<faq id="Is the C/C++ compiler fast?">
+			<question>Is the C/C++ compiler fast?</question>
+			<answer>
+				<p>It's pretty fast. While benchmarking build systems is very difficult, with different project setups potentially affecting the performance dramatically, the compiler plugin was developed with the ambition to be comparable with Boost.Build in performance. From our own user experience we think we have achieved this - in some projects, the plugin has shown itself to be considerably faster. Of course, YMMV applies, especially as there's a lot more than just compilation going on in a Maven job. Module setup especially affects the plugin's ability to effectively parallelize.</p>
+			</answer>
+		</faq>
+	</part>
+</faqs>

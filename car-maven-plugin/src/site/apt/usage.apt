@@ -1,0 +1,3 @@
+Usage
+
+  This plugin is invoked in the <<package>> phase of the default <<car>> lifecycle defined by the <<cpp-compiler-maven-plugin>>. In other words, any project of packaging type <<car>> will invoke this plugin.

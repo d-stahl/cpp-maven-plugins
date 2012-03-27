@@ -1,0 +1,31 @@
+C/C++ Compiler Plugin
+
+  The C/C++ Compiler Plugin compiles and links C/C++ with emphasis on performance and convention over configuration.
+  
+* Concepts
+
+  The following sections describe some of the underlying philosophies and rationales of the plugin's behavior.
+
+** Artifact composition
+
+  The main artifact of any CAR project is a main .car artifact (a standard zip file) containing headers and other uncompiled resources. Compiled (and therefore target specific) files (i.e. static libraries, shared/dynamic libraries and executables) are packaged in their respective attached artifacts, if present. This means that the consumer of the artifact can decide what to depend on, e.g. whether to depend on a static library or only the headers. 
+
+** Dependency extraction
+
+  Since a CAR in the local repository cannot simply be appended to the classpath, as with Java, all dependencies are extracted in the target directory. The plugin will keep track of the version and timestamp of extracted dependencies to avoid needlessly extracting dependencies multiple times. The rule for dependency extraction is as follows:
+  
+  [[1]] If dependency does not exist, extract it.
+  
+  [[2]] If dependency incorrect version, replace it.
+  
+  [[3]] If dependency version is non-SNAPSHOT, do nothing.
+  
+  [[4]] If extracted timestamp is older than that of the local repository artifact, replace it. 
+
+** POM configuration
+  
+  We strongly believe in convention over configuration - a simple project should be able to follow the default path and not have to configure much of anything. One exception is the configuration of {{Bundles}}.
+  
+** {Bundles}
+
+  There's a nearly infinite number of build environment to target environment mappings, and we'd like to support them all. At the same time, we want to keep the plugin slim and avoid verbose project configuration. The way we try to achieve this is by introducing plugin plugins, or Bundles. When the plugin encounters a target environment it will ask all the plugins on its classpath: Given the current host environment, can you handle this target? This means that without any bundles specified, you will never be able to build your project. For more information on using Bundles, see {{{./usage.html}Usage}}

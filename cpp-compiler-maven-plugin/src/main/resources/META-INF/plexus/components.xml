@@ -1,0 +1,21 @@
+<component-set>
+  <components>
+    <component>
+      <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
+      <role-hint>car</role-hint>
+      <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
+      <configuration>
+        <phases>
+          <process-resources>org.apache.maven.plugins:maven-resources-plugin:resources</process-resources>
+          <compile>com.ericsson.tools.cpp:cpp-compiler-maven-plugin:PLUGINVERSION:compile</compile>
+          <process-test-resources>org.apache.maven.plugins:maven-resources-plugin:testResources</process-test-resources>
+          <test-compile>com.ericsson.tools.cpp:cpp-compiler-maven-plugin:PLUGINVERSION:testCompile</test-compile>
+          <test>com.ericsson.tools.cpp:cpp-tester-maven-plugin:PLUGINVERSION:test</test>
+          <package>com.ericsson.tools.cpp:car-maven-plugin:PLUGINVERSION:car</package>
+          <install>org.apache.maven.plugins:maven-install-plugin:install</install>
+          <deploy>org.apache.maven.plugins:maven-deploy-plugin:deploy</deploy>
+        </phases>
+      </configuration>
+    </component>
+  </components>
+</component-set>

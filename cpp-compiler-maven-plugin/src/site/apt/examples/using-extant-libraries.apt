@@ -1,0 +1,28 @@
+Using extant libraries
+
+  If there are extant libraries (shared or static) that you want to include in the build, without handling them as Maven dependencies, you can add include them in your standard project structure. <<lib/static>> and <<lib/shared>> in the source directory of the target (controlled by the <<sources>> parameter) will be searched for static and shared libraries respectively. These libraries will be linked to and included in produced artifacts, as though they were built from the project's sources. A sample project structure would look like this:
+  
++---------------------------------------------------
++- src/
+  +- linux/
+    +- main/
+      +- lib/
+      | +- shared/
+      |   +- importantlib.so
+      | +- static/
+        | +- libm.a
+        | +- libotherstuff.a
++----------------------------------------------------
+  
+  In order for the plugin to pick up these libs (or other sources in e.g. <<src/linux/main/cpp>>) for linux_32 and linux_64 the following plugin configuration is needed:
+  
++---------------------------------------------------
+<configuration>
+  ...
+  <sources>
+  	<linux_32>src/linux</linux_32>
+  	<linux_64>src/linux</linux_64>
+  </sources>
+</configuration>
++---------------------------------------------------
+  

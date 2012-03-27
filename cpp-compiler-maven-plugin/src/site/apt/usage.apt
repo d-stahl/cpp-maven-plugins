@@ -1,0 +1,49 @@
+Usage
+
+* Bundles
+  
+  The easiest way to use a Bundle is to specify it as a dependency to the compiler plugin itself. An example:  
+  
++---------------------------------------------------
+<plugin>
+  <groupId>com.ericsson.tools.cpp</groupId>
+  <artifactId>cpp-compiler-maven-plugin</artifactId>
+  <version>1.0.0</version>
+  <extensions>true</extensions>
+  <dependencies>
+    <dependency>
+      <groupId>com.ericsson.tools.cpp</groupId>
+      <artifactId>cpp-linux-bundle</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.mycompany</groupId>
+      <artifactId>cpp-windows-compiler</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+</plugin>
++----------------------------------------------------
+
+* Dependencies
+  
+  When specifying a dependency it's also important to specify which type of artifact you want to use. This is done via classifiers. The main artifact will contain header files (no classifier), while the example below will cause all the static libraries of the dependency to be extracted and used in linking. Apart from the main artifact, classifiers used by the plugin are static, shared and executables.
+
++---------------------------------------------------
+<dependencies>
+  <dependency>
+    <groupId>com.mycompany.mydep</groupId>
+    <artifactId>some-artifact</artifactId>
+    <version>0.0.1</version>
+    <type>car</type>
+  </dependency>
+  <dependency>
+    <groupId>com.mycompany.mydep</groupId>
+    <artifactId>some-artifact</artifactId>
+    <version>0.0.1</version>
+    <type>car</type>
+    <classifier>static</classifier>
+  </dependency>
+</dependencies>
++----------------------------------------------------
+  

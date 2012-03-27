@@ -1,0 +1,77 @@
+Building test executables
+
+  This example illustrates different approaches to building test executables
+  
+* Introduction
+
+  The <<testCompile>> goal, bound to the <<test-compile>> phase in the default car lifecycle, will compile any code files found in the test directory (by default, <<src/test/cpp>> and <<src/test/include>> for code and headers respectively).
+  
+  To run the tests, the test compiled test code objects must be linked to executables. This is done exactly the same way as with production code (see {{{./building-a-simple-executable-for-linux.html}Building a simple executable for Linux}}), except the <<testExecutables>> parameter is used instead of <<executables>>.
+  
+* Linking explicit executables
+
+  Considering the following plugin configuration:
+  
++---------------------------------------------------
+<configuration>
+  ...
+  <testExecutables>
+  	<testExecutable>
+  		<name>myTests</name>
+  		<entryPointPattern>**/test_main.cc</entryPointPattern>
+  	</testExecutable>
+  </testExecutables>
+</configuration>
++---------------------------------------------------
+   
+   This will link a single executable called test, using any main function present in the matching code files. This is very useful when using a test framework that executes multiple test cases via a single entry-point (e.g. googletest), or when running a small number of very particular tests.   
+
+* Linking one executable per test
+
+  One approach to C/C++ testing is to let each test (as in a test code file) be linked as a stand-alone executable. The <<executables>> and <<testExecutables>> mapping syntax allows for an easy way to configure this by using <<[]>> instead of an explicit name. This will trigger linking of each separate code file into an executable with the same name. As an example, consider the following project structure:
+  
++---------------------------------------------------
++- src/
+  +- test/
+    +- cpp/
+    | +- SomeTest.cpp
+    | +- SomeOtherTest.cpp
+    +- include/
++----------------------------------------------------
+
+  The following plugin configuration would then generate two separate test executables named SomeTest and SomeOtherTest:
+
++---------------------------------------------------
+<configuration>
+  ...
+  <testExecutables>
+  	<testExecutable>
+  		<name>[]</name>
+  		<entryPointPattern>src/test/cpp/*</entryPointPattern>
+  	</testExecutable>
+  </testExecutables>
+</configuration>
++---------------------------------------------------
+
+  If <<testExecutables>> is undefined, this is in fact the default behavior of the plugin. 
+  
+* Mixing approaches
+
+  The approaches described above can of course be mixed, as in the example below: 
+
++---------------------------------------------------
+<configuration>
+  ...
+  <testExecutables>
+  	<testExecutable>
+  		<name>performance</name>
+  		<entryPointPattern>src/test/cpp/characteristics/performance.cc</entryPointPattern>
+  	</testExecutable>
+  	<testExecutable>
+  		<name>[]</name>
+  		<entryPointPattern>src/test/cpp/unit/*</entryPointPattern>
+  	</testExecutable>
+  </testExecutables>
+</configuration>
++---------------------------------------------------
+ 

@@ -1,0 +1,4 @@
+C/C++ Tester Plugin
+
+  The C/C++ Tester plugin executes any test binaries found in the test output directory. It then presents success statistics and fails the build if there are any test failures.
+  

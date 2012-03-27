@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="C/C++ Compiler Maven Plugin">
+	<body>
+		<menu name="Overview">
+			<item name="Introduction" href="index.html" />
+			<item name="Goals" href="plugin-info.html" />
+			<item name="Usage" href="usage.html" />
+			<item name="FAQ" href="faq.html" />
+		</menu>
+		<menu name="Examples">
+			<item name="Building a simple executable for Linux" href="examples/building-a-simple-executable-for-linux.html" />
+			<item name="Building test executables" href="examples/building-test-executables.html" />
+			<item name="Using extant libraries" href="examples/using-extant-libraries.html" />
+		</menu>
+		<menu ref="reports" />
+	</body>
+</project>

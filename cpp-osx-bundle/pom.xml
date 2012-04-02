@@ -1,0 +1,24 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>cpp-osx-bundle</artifactId>
+	<version>1.0.0</version>
+	<packaging>jar</packaging>
+
+	<parent>
+		<groupId>com.ericsson.tools.cpp</groupId>
+		<artifactId>cpp-maven-plugins</artifactId>
+		<version>1.0.1</version>
+	</parent>
+
+	<name>C/C++ Compiler OS X 32/64 Bundle</name>
+	<description>This bundle provides OS X 32/64 compilation, linking and dependency analysis to the cpp-compiler-maven-plugin.</description>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.ericsson.tools.cpp</groupId>
+			<artifactId>cpp-compiler-maven-plugin</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+	</dependencies>
+</project>

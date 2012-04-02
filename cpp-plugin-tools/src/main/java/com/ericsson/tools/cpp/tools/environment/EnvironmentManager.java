@@ -33,13 +33,15 @@ public class EnvironmentManager {
 	public static final Environment SOLARIS_32 = new Environment("Solaris_32", ".so");
 	public static final Environment SOLARIS_64 = new Environment("Solaris_64", ".so");
 	public static final Environment SOLARIS_SPARC = new Environment("Solaris_sparc", ".so");
+	public static final Environment OSX_32 = new Environment("OSX_32", ".so");
+	public static final Environment OSX_64 = new Environment("OSX_64", ".so");
 
 	private final Map<String, Environment> environments = new HashMap<String, Environment>();
 	private final Log log;
 
 	public EnvironmentManager(Log log) throws MojoExecutionException {
 		this.log = log;
-		addEnvironment(LINUX_32, LINUX_64, WIN_32, WIN_64, SOLARIS_32, SOLARIS_64, SOLARIS_SPARC);
+		addEnvironment(LINUX_32, LINUX_64, WIN_32, WIN_64, SOLARIS_32, SOLARIS_64, SOLARIS_SPARC, OSX_32, OSX_64);
 		addAlias("linux_i386", LINUX_32);
 		addAlias("linux_x64", LINUX_64);
 	}

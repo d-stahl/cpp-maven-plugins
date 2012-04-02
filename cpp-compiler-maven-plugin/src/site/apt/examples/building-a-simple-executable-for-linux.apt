@@ -23,28 +23,32 @@ Building a simple executable for Linux
   In the POM we'll start by setting the packaging type to <<car>>. We then configure the plugin:
   
 +---------------------------------------------------
-<build>
-  <plugins>
-    <plugin>
-      <artifactId>cpp-compiler-maven-plugin</artifactId>
-      <groupId>com.ericsson.tools.cpp</groupId>
-      <version>1.0.0</version>
-      <configuration>
-        <targetEnvironments>linux_32,linux_64</targetEnvironments>
-        <executables>
-          <executable>
-            <name>hello</name>
-          </executable>
-        </executables>
-      </configuration>
-    </plugin>
-  </plugins>
-</build>  
+<project>
+  ...
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>cpp-compiler-maven-plugin</artifactId>
+        <groupId>com.ericsson.tools.cpp</groupId>
+        <version>1.0.0</version>
+        <extensions>true</extensions>
+        <configuration>
+          <targetEnvironments>linux_32,linux_64</targetEnvironments>
+          <executables>
+            <executable>
+              <name>hello</name>
+            </executable>
+          </executables>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>  
 +---------------------------------------------------
 
   There are two things to note here:
   The <<targetEnvironments>> parameter is a comma separated list of targets to build for. In this case we'll build for 32-bit and 64-bit Linux.
-  The <<executables>> parameter is a map of executables per platform. In this case we simply tell it to create an executable named <<hello>>. By default it will be created for all targets, and one and only one entry point will be expected in the default pattern of <<src/main/cpp/*.cpp>>.  
+  The <<executables>> parameter is a map of executables per platform. In this case we simply tell it to create an executable named <<hello>>. By default it will be created for all targets, and one and only one entry point will be expected in the default pattern of <<src/main/cpp/*.c*>>.  
 
 * Bundle configuration
 

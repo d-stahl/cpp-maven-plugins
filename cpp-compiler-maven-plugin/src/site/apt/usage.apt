@@ -1,5 +1,25 @@
 Usage
 
+* Basic configuration
+
+  Like any Maven plugin, the C/C++ Compiler Plugin is configured via a <<plugin>> element in the Project Object Model. Since it defines its own lifecycle, it needs an <<extensions>>, which instructs Maven to look for lifecycle definitions in the plugin. An example of a very minimalistic plugin configuration:
+  
++---------------------------------------------------
+<project>
+  ...
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.ericsson.tools.cpp</groupId>
+        <artifactId>cpp-compiler-maven-plugin</artifactId>
+        <version>1.0.0</version>
+        <extensions>true</extensions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
++----------------------------------------------------
+
 * Bundles
   
   The easiest way to use a Bundle is to specify it as a dependency to the compiler plugin itself. An example:  
@@ -30,20 +50,23 @@ Usage
   When specifying a dependency it's also important to specify which type of artifact you want to use. This is done via classifiers. The main artifact will contain header files (no classifier), while the example below will cause all the static libraries of the dependency to be extracted and used in linking. Apart from the main artifact, classifiers used by the plugin are static, shared and executables.
 
 +---------------------------------------------------
-<dependencies>
-  <dependency>
-    <groupId>com.mycompany.mydep</groupId>
-    <artifactId>some-artifact</artifactId>
-    <version>0.0.1</version>
-    <type>car</type>
-  </dependency>
-  <dependency>
-    <groupId>com.mycompany.mydep</groupId>
-    <artifactId>some-artifact</artifactId>
-    <version>0.0.1</version>
-    <type>car</type>
-    <classifier>static</classifier>
-  </dependency>
-</dependencies>
+<project>
+  <dependencies>
+    <dependency>
+      <groupId>com.mycompany.mydep</groupId>
+      <artifactId>some-artifact</artifactId>
+      <version>0.0.1</version>
+      <type>car</type>
+    </dependency>
+    <dependency>
+      <groupId>com.mycompany.mydep</groupId>
+      <artifactId>some-artifact</artifactId>
+      <version>0.0.1</version>
+      <type>car</type>
+      <classifier>static</classifier>
+    </dependency>
+  </dependencies>
+  ...
+</project>
 +----------------------------------------------------
   

@@ -2,17 +2,20 @@ Usage
 
 * Basic configuration
 
-  Like any Maven plugin, the C/C++ Compiler Plugin is configured via a <<plugin>> element in the Project Object Model. Since it defines its own lifecycle, it needs an <<extensions>>, which instructs Maven to look for lifecycle definitions in the plugin. An example of a very minimalistic plugin configuration:
+  Like any Maven plugin, the C/C++ Compiler Plugin is configured via a <<plugin>> element in the Project Object Model (POM). Since it defines its own lifecycle, it needs an <<extensions>>, which instructs Maven to look for lifecycle definitions in the plugin. You may find it convenient to store the plugin version in a property within the POM, to avoid duplication (this also makes it dynamically configurable from the command line by setting it as a system property). An example of a very minimalistic plugin configuration:
   
 +---------------------------------------------------
 <project>
   ...
+  <properties>
+    <cpp-plugin-version>1.0.1</cpp-plugin-version>
+  </properties>
   <build>
     <plugins>
       <plugin>
         <groupId>com.ericsson.tools.cpp</groupId>
         <artifactId>cpp-compiler-maven-plugin</artifactId>
-        <version>1.0.0</version>
+        <version>${cpp-version-plugin}</version>
         <extensions>true</extensions>
       </plugin>
     </plugins>
@@ -25,24 +28,31 @@ Usage
   The easiest way to use a Bundle is to specify it as a dependency to the compiler plugin itself. An example:  
   
 +---------------------------------------------------
-<plugin>
-  <groupId>com.ericsson.tools.cpp</groupId>
-  <artifactId>cpp-compiler-maven-plugin</artifactId>
-  <version>1.0.0</version>
-  <extensions>true</extensions>
-  <dependencies>
-    <dependency>
-      <groupId>com.ericsson.tools.cpp</groupId>
-      <artifactId>cpp-linux-bundle</artifactId>
-      <version>1.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.mycompany</groupId>
-      <artifactId>cpp-windows-compiler</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
-  </dependencies>
-</plugin>
+<project>
+  ...
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.ericsson.tools.cpp</groupId>
+        <artifactId>cpp-compiler-maven-plugin</artifactId>
+        <version>${cpp-version-plugin}</version>
+        <extensions>true</extensions>
+        <dependencies>
+          <dependency>
+            <groupId>com.ericsson.tools.cpp</groupId>
+            <artifactId>cpp-linux-bundle</artifactId>
+            <version>${cpp-version-plugin}</version>
+          </dependency>
+          <dependency>
+            <groupId>com.mycompany</groupId>
+            <artifactId>cpp-windows-compiler</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+    </plugins>
+  </build>
+</project>
 +----------------------------------------------------
 
 * Dependencies

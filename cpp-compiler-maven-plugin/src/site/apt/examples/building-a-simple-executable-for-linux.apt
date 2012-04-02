@@ -30,7 +30,7 @@ Building a simple executable for Linux
       <plugin>
         <artifactId>cpp-compiler-maven-plugin</artifactId>
         <groupId>com.ericsson.tools.cpp</groupId>
-        <version>1.0.0</version>
+        <version>${cpp-version-plugin}</version>
         <extensions>true</extensions>
         <configuration>
           <targetEnvironments>linux_32,linux_64</targetEnvironments>
@@ -52,7 +52,7 @@ Building a simple executable for Linux
 
 * Bundle configuration
 
-  All target specific compilation and linking logic resides in Bundles. In order to build for any target environment the appropriate Bundle needs to be declared. In this case we'll use the <<cpp-linux-compiler>> Bundle. To make it available to the plugin we add it as a plugin dependency:  
+  All target specific compilation and linking logic resides in Bundles. In order to build for any target environment the appropriate Bundle needs to be declared. In this case we'll use the <<cpp-linux-bundle>>. To make it available to the plugin we add it as a plugin dependency:  
 
 +---------------------------------------------------
 <plugin>
@@ -62,7 +62,7 @@ Building a simple executable for Linux
     <dependency>
       <groupId>com.ericsson.tools.cpp</groupId>
       <artifactId>cpp-linux-bundle</artifactId>
-      <version>1.0.0</version>
+      <version>${cpp-version-plugin}</version>
     </dependency>
   </dependencies>
 </plugin>

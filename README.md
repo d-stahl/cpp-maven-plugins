@@ -16,7 +16,11 @@ and uploaded to GitHub in 2012.
 Usage
 -----
 Help on using the plugins can be obtained through the **help**
-mojos of each plugin, and through the plugin sites. 
+mojos of each plugin, and through the plugin sites.
+
+Build Status
+------------
+ [![Build status]https://secure.travis-ci.org/rails/rails.png]http://travis-ci.org/#!/danielfranzen/cpp-maven-plugins
 
 Copyright and License
 ---------------------

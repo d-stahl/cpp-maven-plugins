@@ -57,7 +57,7 @@ Building a simple executable for Linux
   <dependencies>
     <dependency>
       <groupId>com.ericsson.tools.cpp</groupId>
-      <artifactId>cpp-linux-compiler</artifactId>
+      <artifactId>cpp-linux-bundle</artifactId>
       <version>1.0.0</version>
     </dependency>
   </dependencies>

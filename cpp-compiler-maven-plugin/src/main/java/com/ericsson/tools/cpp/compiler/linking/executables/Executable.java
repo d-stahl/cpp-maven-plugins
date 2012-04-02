@@ -53,7 +53,7 @@ public class Executable {
 			throw new MojoExecutionException("Mandatory executable parameter \"name\" has not been set.");
 
 		if( entryPointPattern == null )
-			entryPointPattern = "src/main/cpp/*.cpp";
+			entryPointPattern = "src/main/cpp/*.c*";
 
 		if( targets == null )
 			targets = "all";

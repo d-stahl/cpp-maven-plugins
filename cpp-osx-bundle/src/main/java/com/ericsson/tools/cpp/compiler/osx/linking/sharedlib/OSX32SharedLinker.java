@@ -31,7 +31,12 @@ public class OSX32SharedLinker extends AbstractGccSharedLinker {
 	
 	@Override
 	protected String getMandatoryLinkerArguments() {
-                // gcc does not understand this in OS X 10.7
-		return super.getMandatoryLinkerArguments();/* + " -m elf_i386";*/
+		return super.getMandatoryLinkerArguments() + " -m32";
 	}
+
+        @Override 
+        protected String getSoName( final String libName ) {
+                return "-Wl,-dylib_install_name -Wl," + libName;
+        }
+
 }

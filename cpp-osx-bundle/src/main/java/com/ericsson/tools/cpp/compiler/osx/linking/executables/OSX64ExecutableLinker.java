@@ -33,8 +33,7 @@ public class OSX64ExecutableLinker extends AbstractGccExecutableLinker {
 	
 	@Override
 	protected String getMandatoryLinkerArguments() {
-		// gcc does not understand this in OS X 10.7
-                return super.getMandatoryLinkerArguments();/* + " -m elf_x86_64";*/
+                return super.getMandatoryLinkerArguments() + " -m64";
 	}
 
         @Override

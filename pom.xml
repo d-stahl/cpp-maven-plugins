@@ -40,6 +40,17 @@
 			</roles>
 			<timezone>+1</timezone>
 		</developer>
+		<developer>
+			<id>mattias_bergbom</id>
+			<name>Mattias Bergbom</name>
+			<email>mattias@mattiasbergbom.com</email>
+			<organization>Mattias Bergbom VFX</organization>
+			<organizationUrl>http://www.mattiasbergbom.com</organizationUrl>
+			<roles>
+				<role>associate developer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
 	</developers>
 
 	<dependencies>
@@ -75,6 +86,7 @@
 	<modules>
 		<module>cpp-plugin-tools</module>
 		<module>cpp-linux-bundle</module>
+		<module>cpp-osx-bundle</module>
 		<module>cpp-compiler-maven-plugin</module>
 		<module>cpp-tester-maven-plugin</module>
 		<module>car-maven-plugin</module>

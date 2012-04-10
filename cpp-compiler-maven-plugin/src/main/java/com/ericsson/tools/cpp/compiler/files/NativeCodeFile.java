@@ -19,10 +19,9 @@ package com.ericsson.tools.cpp.compiler.files;
 import java.io.File;
 
 public class NativeCodeFile {
-	public static final String[] SOURCE_SUFFIXES = { ".cc", ".c", ".cpp", ".cxx", ".c++" };
+	public static final String[] SOURCE_SUFFIXES = { ".cc", ".c", ".cpp", ".cxx", ".c++", ".C" };
 	public static final String OBJECT_SUFFIX = ".o";
 	public static final String DEPEND_SUFFIX = ".d";
-
 
 	private final String sourceFilename;
 	private final File sourceDirectory;

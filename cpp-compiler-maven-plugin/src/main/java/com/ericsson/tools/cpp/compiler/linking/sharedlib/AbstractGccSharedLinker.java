@@ -39,14 +39,23 @@ public abstract class AbstractGccSharedLinker extends AbstractSharedLinker {
 		CliExecutor executor = new CliExecutor(log);
 		executor.initialize(libFile.getParentFile(), "gcc");
 		executor.getCommandline().createArg().setValue("-shared");
-		executor.getCommandline().createArg().setValue("-Wl,-soname," + libName);
+		executor.getCommandline().createArg().setValue(getSoName(libName));
 		executor.getCommandline().createArg().setLine(getMandatoryLinkerArguments());
 		executor.getCommandline().createArg().setValue("-o");
 		executor.getCommandline().createArg().setValue(libFile.getName());
+		executor.getCommandline().createArg().setLine(getDefaultLibraries());
 
 		for(NativeCodeFile file : allFiles)
 			executor.getCommandline().createArg().setValue(file.getObjectFile().getPath());
 
 		executor.execute();
+	}
+
+        protected String getSoName( final String libName ) {
+                return "-Wl,-soname," + libName;
+        }
+
+	protected String getDefaultLibraries() throws MojoFailureException, MojoExecutionException {
+		return "-lstdc++";
 	}
 }

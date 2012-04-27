@@ -34,6 +34,7 @@ import com.ericsson.tools.cpp.compiler.dependencies.DependencyExtractor;
 import com.ericsson.tools.cpp.compiler.files.NativeCodeFile;
 import com.ericsson.tools.cpp.compiler.linking.AbstractLinker;
 import com.ericsson.tools.cpp.compiler.linking.executables.Executable;
+import com.ericsson.tools.cpp.compiler.linking.executables.ExecutableCollection;
 import com.ericsson.tools.cpp.compiler.linking.staticlib.StaticLinker;
 import com.ericsson.tools.cpp.compiler.settings.CompilerPluginSettings;
 import com.ericsson.tools.cpp.tools.FileFinder;
@@ -73,7 +74,7 @@ public class TargetManager {
 		compiledClasses.addAll(getCompilationOverseer().compile());
 	}
 
-	public void link(final Collection<Executable> executables, final Collection<Artifact> dependencies) throws MojoExecutionException, MojoFailureException {
+	public void link(final ExecutableCollection executables, final Collection<Artifact> dependencies) throws MojoExecutionException, MojoFailureException {
 		if(executables == null) {
 			log.debug("Executables are undefined, skipping linking.");
 			return;
@@ -99,14 +100,14 @@ public class TargetManager {
 		return allClasses;
 	}
 
-	private Collection<AbstractLinker> getLinkers(final Collection<Executable> executables) throws MojoExecutionException, MojoFailureException {
+	private Collection<AbstractLinker> getLinkers(final ExecutableCollection executables) throws MojoExecutionException, MojoFailureException {
 		if( linkers == null )
 			linkers = createLinkers(executables);
 
 		return linkers;
 	}
 
-	private Collection<AbstractLinker> createLinkers(final Collection<Executable> executables) throws MojoExecutionException, MojoFailureException {
+	private Collection<AbstractLinker> createLinkers(final ExecutableCollection executables) throws MojoExecutionException, MojoFailureException {
 		Collection<AbstractLinker> linkers = new ArrayList<AbstractLinker>();
 
 		linkers.add(new StaticLinker(log, settings, targetEnvironment));
@@ -114,11 +115,9 @@ public class TargetManager {
 		if(linkShared)
 			linkers.add(createSharedLinker());
 
-		for(Executable e : executables) {
-			log.warn("Creating linker for executable " + e + " with target " + e.getTargets());
+		for(Executable e : executables.getVerifiedExecutables())
 			if(e.shallBeCreatedForTarget(targetEnvironment))
 				linkers.add(createExecutableLinker(e));
-		}
 
 		return linkers;
 	}

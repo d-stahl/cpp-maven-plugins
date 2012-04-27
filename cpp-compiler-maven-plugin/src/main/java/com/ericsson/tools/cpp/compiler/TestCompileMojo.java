@@ -23,7 +23,6 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.plexus.util.FileUtils;
 
-import com.ericsson.tools.cpp.compiler.files.NativeCodeFile;
 import com.ericsson.tools.cpp.compiler.linking.executables.Executable;
 import com.ericsson.tools.cpp.tools.environment.Environment;
 import com.ericsson.tools.cpp.tools.settings.PluginSettingsImpl;
@@ -100,7 +99,7 @@ public class TestCompileMojo extends AbstractCompileMojo {
 		}
 		else {
 			if(testExecutables == null)
-				testExecutables = new Executable[] { new Executable("[]", "src/test/cpp/*" + NativeCodeFile.SOURCE_SUFFIXES[0], null, null) };
+				testExecutables = new Executable[] { new Executable(Executable.ENUMERATION_SYMBOL, "src/test/cpp/*", null, null) };
 
 			run(true, testExecutables, hostEnvironment);
 		}

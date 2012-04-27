@@ -30,11 +30,13 @@ import com.ericsson.tools.cpp.tools.environment.Environment;
 
 
 public class Executable {
+	public final static String ENUMERATION_SYMBOL = "[]";
+	
 	private String name;
 	private String entryPointPattern;
 	private String targets;
 	private String rpath;
-
+	
 	private Collection<NativeCodeFile> nativeCodeFiles;
 
 	public Executable() {
@@ -61,7 +63,8 @@ public class Executable {
 		if( rpath == null )
 			rpath = "-rpath,\\$ORIGIN";
 
-		nativeCodeFiles = createNativeCodeFilesCollection(log, projectBasedir, compiledFiles);
+		
+			addNativeCodeFiles(findNativeCodeFiles(log, projectBasedir, compiledFiles));
 	}
 
 	public String getName() {
@@ -79,7 +82,25 @@ public class Executable {
 	public String getRpath() {
 		return rpath;
 	}
-
+	
+	public Collection<NativeCodeFile> getNativeCodeFiles() {
+		return nativeCodeFiles;
+	}
+	
+	public void addNativeCodeFile(final NativeCodeFile ncf) {
+		if( nativeCodeFiles == null )
+			nativeCodeFiles = new ArrayList<NativeCodeFile>();
+		
+		nativeCodeFiles.add(ncf);
+	}
+	
+	public void addNativeCodeFiles(final Collection<NativeCodeFile> ncf) {
+		if( nativeCodeFiles == null )
+			nativeCodeFiles = new ArrayList<NativeCodeFile>();
+		
+		nativeCodeFiles.addAll(ncf);
+	}
+	
 	@Override
 	public String toString() {
 		if( name == null )
@@ -100,7 +121,7 @@ public class Executable {
 		return objectFiles;
 	}
 
-	private Collection<NativeCodeFile> createNativeCodeFilesCollection(final Log log, final File projectBasedir, final Collection<NativeCodeFile> compiledFiles) {
+	private Collection<NativeCodeFile> findNativeCodeFiles(final Log log, final File projectBasedir, final Collection<NativeCodeFile> compiledFiles) {
 		log.debug("Creative native code file list matching pattern " + entryPointPattern + " for executable " + name + ".");
 
 		final Collection<NativeCodeFile> allCppFiles = new ArrayList<NativeCodeFile>();
@@ -109,14 +130,13 @@ public class Executable {
 			final Collection<File> matchingRawFiles = findMatchingSourceFiles(projectBasedir);
 			allCppFiles.addAll(translateRawFilesToCompiledFiles(log, matchingRawFiles, compiledFiles));
 		}
-
 		if( allCppFiles.isEmpty() )
-			log.warn("Found no compiled files matching the pattern " + entryPointPattern + " for executable " + name + ".");
+			log.debug("Found no compiled files matching the pattern \"" + entryPointPattern + "\" for executable " + name + ".");
 
 		return allCppFiles;
 	}
 
-	public Collection<File> findMatchingSourceFiles(final File projectBasedir) {
+	private Collection<File> findMatchingSourceFiles(final File projectBasedir) {
 		final Collection<File> l = new ArrayList<File>();
 		for(String patternElement : entryPointPattern.split(",")) {
 			File f = new File(patternElement);

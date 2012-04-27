@@ -19,7 +19,6 @@ package com.ericsson.tools.cpp.compiler;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -35,8 +34,8 @@ import com.ericsson.tools.cpp.compiler.artifacts.ArtifactFilter;
 import com.ericsson.tools.cpp.compiler.artifacts.ArtifactManager;
 import com.ericsson.tools.cpp.compiler.bundle.BundleProviderManager;
 import com.ericsson.tools.cpp.compiler.dependencies.DependencyExtractor;
-import com.ericsson.tools.cpp.compiler.files.NativeCodeFile;
 import com.ericsson.tools.cpp.compiler.linking.executables.Executable;
+import com.ericsson.tools.cpp.compiler.linking.executables.ExecutableCollection;
 import com.ericsson.tools.cpp.compiler.publishing.Publisher;
 import com.ericsson.tools.cpp.compiler.settings.CompilerPluginSettings;
 import com.ericsson.tools.cpp.tools.bundle.BundleLoader;
@@ -275,9 +274,10 @@ public abstract class AbstractCompileMojo extends AbstractMojo
 			targetManager.compile();
 			final long compilationDoneTime = Calendar.getInstance().getTimeInMillis();
 			
-			final Collection<Executable> executablesCollection = createExecutablesCollection(executables, targetManager.getAllClasses());
-			printExecutables(executablesCollection);
-			targetManager.link(executablesCollection, new ArtifactFilter(getLog(), "car").filter(project.getArtifacts()));
+			final ExecutableCollection executableCollection = new ExecutableCollection(targetManager.getAllClasses(), project.getBasedir(), getLog());
+			executableCollection.addExecutables(executables);
+			getLog().debug(executableCollection.getExecutablesDescriptonString());
+			targetManager.link(executableCollection, new ArtifactFilter(getLog(), "car").filter(project.getArtifacts()));
 			publisher.publish(targetManager.getTargetEnvironment());
 			final long linkingDoneTime = Calendar.getInstance().getTimeInMillis();
 
@@ -285,30 +285,6 @@ public abstract class AbstractCompileMojo extends AbstractMojo
 			getLog().debug(targetManager.getTargetEnvironment() + ": Time spent in:" + lineSeparator +
 					"    Compilation:        " + (compilationDoneTime - startTime) + " ms" + lineSeparator +
 					"    Building artifacts: " + (linkingDoneTime - compilationDoneTime) + " ms");
-		}
-	}
-
-	private Collection<Executable> createExecutablesCollection(final Executable[] executables, final Collection<NativeCodeFile> compiledFiles) throws MojoExecutionException {
-		final Collection<Executable> l = new ArrayList<Executable>();
-
-		if(executables != null) {
-			for(Executable e: executables)
-				if(e.getName().equals("[]"))
-					expandExecutable(l, e);
-				else
-					l.add(e);
-
-			for(Executable e : l)
-				e.initialize(getLog(), project.getBasedir(), compiledFiles);
-		}
-
-		return l;
-	}
-
-	private void expandExecutable(final Collection<Executable> l, final Executable e) {
-		for(File f : e.findMatchingSourceFiles(project.getBasedir())) {
-			final String name = f.getName().substring(0, f.getName().lastIndexOf("."));
-			l.add(new Executable(name, f.getAbsolutePath(), e.getTargets(), e.getRpath()));
 		}
 	}
 
@@ -320,25 +296,6 @@ public abstract class AbstractCompileMojo extends AbstractMojo
 
 		return list;
 	}
-	
-	private void printExecutables(final Collection<Executable> executables) throws MojoExecutionException, MojoFailureException {
-		if( executables == null ) {
-			getLog().debug("No executables defined.");
-			return;
-		}
-			
-		getLog().debug(executables.size() + " executables are defined:");
-		for(Executable e : executables) {
-			getLog().debug("  Executable: " + e.getName());
-			getLog().debug("    Entrypoint : " + e.getEntryPointPattern());
-			getLog().debug("    Targets    : " + e.getTargets());
-			getLog().debug("    Rpath      : " + e.getRpath());
-			getLog().debug("    Files      :");
-			for(File f : e.getAllFilesToLink())
-				getLog().debug("      " + f.getPath());
-		}
-	}
-	
 
 	protected Environment[] determineTargetEnvironments() throws MojoExecutionException {
 		final String targetsString = determineTargetsString();

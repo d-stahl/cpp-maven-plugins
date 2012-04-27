@@ -16,20 +16,21 @@
 
 package com.ericsson.tools.cpp.compiler.dependencies;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.io.File;
 
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.ericsson.tools.cpp.compiler.artifacts.ArtifactManager;
-import com.ericsson.tools.cpp.compiler.dependencies.DependencyExtractor;
 import com.ericsson.tools.cpp.compiler.settings.DependencyExtractionSettings;
-
-
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
 
 public class TestDependencyExtractor {
 	private Log log;
@@ -70,5 +71,17 @@ public class TestDependencyExtractor {
 		when(destination.lastModified()).thenReturn(0l);
 		when(artifactFile.lastModified()).thenReturn(1l);
 		assertTrue("Artifact file newer than extraction destination should be considered updated.", de.isUpdatedSnapshot(artifact, destination));
+	}
+	
+	@Test
+	public void invalidatedDestinationDirectoryShouldBeDeletedFromDisk() throws MojoExecutionException {
+		final File testDirectory = new File("testDir");
+		testDirectory.mkdir();
+		final File childElement = new File(testDirectory, "child");
+		childElement.mkdir();
+		
+		assertTrue(testDirectory.exists());
+		de.deleteInvalidatedDestination(testDirectory);
+		assertFalse(testDirectory.exists());
 	}
 }

@@ -75,7 +75,9 @@ public class DependencyExtractor {
 
 		if( dep.getDestination().exists() ) {
 			log.debug("Destination " + dep.getDestination() + " already exists. It will be checked for validity.");
-			deleteDestinationIfInvalid(dep.getArtifact(), dep.getDestination());
+			
+			if(isDestinationInvalid(dep.getArtifact(), dep.getDestination()))
+				deleteInvalidatedDestination(dep.getDestination());
 		}
 
 		if( !dep.getDestination().exists() ) {
@@ -130,29 +132,31 @@ public class DependencyExtractor {
 		return entry.getName().startsWith(dep.getTarget());
 	}
 
-	private void deleteDestinationIfInvalid(final Artifact artifact, final File destination) throws MojoExecutionException {
+	protected boolean isDestinationInvalid(final Artifact artifact, final File destination) throws MojoExecutionException {
 		final File versionFile = new File(destination, VERSION_FILENAME);
 
 		try {
 			if(isUpdatedSnapshot(artifact, destination)) {
 				log.info(destination + " will be cleaned. There is a newer SNAPSHOT version in local repository.");
-				destination.delete();
+				return true;
 			}
 
 			if( !versionFile.exists() ) {
 				log.warn(destination + " will be cleaned. It contains no version file, which might indicate a previous failed extraction attempt.");
-				destination.delete();
+				return true;
 			}
 
 			final String previouslyExtractedVersion = FileUtils.fileRead(versionFile);
 			if(!previouslyExtractedVersion.equals(artifact.getVersion())) {
 				log.warn(destination + " will be cleaned. It contains version " + previouslyExtractedVersion + ", but the current dependency is to " + artifact.getVersion() + ".");
-				destination.delete();
+				return true;
 			}
-		} 
-		catch (IOException e) {
-			throw new MojoExecutionException("Inspection and/or cleaning of " + destination + " failed.", e);
 		}
+		catch (IOException e) {
+			throw new MojoExecutionException("Inspection of " + destination + " failed.", e);
+		}
+
+		return false;
 	}
 
 	private void setupDestination(final Artifact artifact, final File destination) throws MojoExecutionException {
@@ -184,6 +188,15 @@ public class DependencyExtractor {
 		} 
 		catch (IOException e) {
 			throw new MojoExecutionException("Failed to extract " + entry.getName() + " from " + zipFile.getName() + " to " + targetFile.getPath(), e);
+		}
+	}
+
+	protected void deleteInvalidatedDestination(final File destination) throws MojoExecutionException {
+		try {
+			FileUtils.deleteDirectory(destination);
+		}
+		catch (IOException e) {
+			throw new MojoExecutionException("Deletion of invalidated directory \"" + destination + "\" failed.", e);
 		}
 	}
 }

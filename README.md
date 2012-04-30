@@ -20,7 +20,7 @@ mojos of each plugin, and through the plugin sites.
 
 Project Status
 ------------
-Build Status [![Build Status](https://secure.travis-ci.org/rails/rails.png)](http://travis-ci.org/danielfranzen/cpp-maven-plugins)
+Build Status [![Build Status](https://secure.travis-ci.org/danielfranzen/cpp-maven-plugins.png)](http://travis-ci.org/danielfranzen/cpp-maven-plugins)
 
 Copyright and License
 ---------------------

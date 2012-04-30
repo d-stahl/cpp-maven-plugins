@@ -86,5 +86,8 @@ public class HelpMojo extends AbstractHelpMojo {
 		getLog().info("    runValgrind:      Whether to execute Valgrind. If true, Valgrind is expected to be present on the path.");
 		getLog().info("    suppressionsFile: File containing Valgrind suppressions. Only used if runValgrind is true."); 
 		getLog().info("                      Default: ${basedir}/src/test/cpp/valgrind.supp");
+		getLog().info("    skipTests:        Prevents execution of test cases."); 
+		getLog().info("    skip:             Prevents execution of test cases.");
+		getLog().info("                      Also settable through the maven.test.skip system property, which will also prevent cpp-compiler-maven-plugin from compiling test cases."); 
 	}
 }

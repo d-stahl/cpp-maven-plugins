@@ -95,7 +95,7 @@ public class TestMojo extends AbstractMojo
 	 * @since 0.1.2
 	 */
 	private boolean runValgrind;
-	
+
 	/**
 	 * The host environment name. If invoked via the car lifecycle,
 	 * this property will be set by the cpp-compiler-maven-plugin.
@@ -105,8 +105,30 @@ public class TestMojo extends AbstractMojo
 	 * 		expression="${host.environment}"
 	 */
 	private String hostEnvironmentName;
+
+	/**
+	 * Set this to "true" to skip test execution.
+	 * The test cases will still be compiled by cpp-compiler-maven-plugin.
+	 *
+	 * @parameter default-value="false" expression="${skipTests}"
+	 * @since 1.1.0
+	 */
+	private boolean skipTests;
+
+	/**
+	 * Set this to "true" to skip test execution.
+	 * This parameter will also prevent test compilation by cpp-compiler-maven-plugin.
+	 *
+	 * @parameter default-value="false" expression="${maven.test.skip}"
+	 */
+	private boolean skip;	
 	
 	public void execute() throws MojoExecutionException, MojoFailureException {
+		if( skip || skipTests ) {
+			getLog().info("Skipping test execution.");
+			return;
+		}
+		
 		final long startTime = Calendar.getInstance().getTimeInMillis();
 
 		final Environment hostEnvironment = determineHostEnvironment();
@@ -127,11 +149,11 @@ public class TestMojo extends AbstractMojo
 		if (hostEnvironmentName == null) {
 			hostEnvironmentName = System.getProperty("host.environment");
 		}
-		
+
 		if (hostEnvironmentName == null) {
 			throw new MojoExecutionException("Unable to determine host environment");
 		}
-		
+
 		return new EnvironmentManager(getLog()).getEnvironmentByName(hostEnvironmentName);
 	}
 
@@ -151,19 +173,19 @@ public class TestMojo extends AbstractMojo
 			getLog().info("No test binaries found.");
 			return;
 		}
-		
+
 		String failureMessage = "Tests failed!";
 		int successes = 0;
 
 		for(Entry<File, Integer> result : testResults.entrySet()) {
 			final String paddedName = String.format("%1$-25s", result.getKey().getName() + ":");
-			
+
 			if(result.getValue() == 0)
 				successes++;
 			else
 				failureMessage += lineSeparator + "    " + paddedName + " FAILED (returned " + result.getValue() + ")";
 		}
-		
+
 		getLog().info("Successfully executed test binaries: " + successes + " / " + testResults.size() + " (" + getPercentageString(successes, testResults.size()) + "). " + timeSpent + "ms elapsed.");
 
 		if( successes != testResults.size() )
@@ -172,7 +194,7 @@ public class TestMojo extends AbstractMojo
 
 	private String getPercentageString(double numerator, double denominator) {
 		final double flooredPercentage = Math.floor((numerator / denominator) * 100) / 100;
-	    return NumberFormat.getPercentInstance().format(flooredPercentage);
+		return NumberFormat.getPercentInstance().format(flooredPercentage);
 	}
 
 	private boolean isValgrindAvailable() throws MojoFailureException, MojoExecutionException {
@@ -185,14 +207,14 @@ public class TestMojo extends AbstractMojo
 	private List<File> findTestBinaries(final Environment environment, final PluginSettingsImpl settings) {
 		final File directory = settings.getExecutablesOutputDirectory(environment, true);
 		final List<File> files = directory.isDirectory() ?
-			Arrays.asList(directory.listFiles(new FileFilter() {
-				@Override
-				public boolean accept(File file) {
-					return !file.isDirectory() && file.canExecute();
-				}
-			}))
-			: (List<File>) Collections.EMPTY_LIST;
-		getLog().debug("Found " + files.size() + " test binaries in " + directory);
-		return files;
+				Arrays.asList(directory.listFiles(new FileFilter() {
+					@Override
+					public boolean accept(File file) {
+						return !file.isDirectory() && file.canExecute();
+					}
+				}))
+				: (List<File>) Collections.EMPTY_LIST;
+				getLog().debug("Found " + files.size() + " test binaries in " + directory);
+				return files;
 	}
 }

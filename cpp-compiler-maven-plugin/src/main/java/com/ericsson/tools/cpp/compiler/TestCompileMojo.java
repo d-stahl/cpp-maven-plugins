@@ -89,8 +89,21 @@ public class TestCompileMojo extends AbstractCompileMojo {
 	 */
 	private Executable[] testExecutables;
 
+	/**
+	 * Set this to "true" to bypass unit test compilation.
+	 *
+	 * @parameter default-value="false" expression="${maven.test.skip}"
+	 * @since 1.1.0
+	 */
+	private boolean skip;
+
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
+		if( skip ) {
+			getLog().info("Skipping test compilation.");
+			return;
+		}
+		
 		initialize();
 
 		if(!isExecutionEnvironmentAmongTargetEnvironments(determineTargetEnvironments(), hostEnvironment)) {

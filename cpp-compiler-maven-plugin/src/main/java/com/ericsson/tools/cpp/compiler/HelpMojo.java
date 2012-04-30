@@ -86,8 +86,8 @@ public class HelpMojo extends AbstractHelpMojo {
 	}
 	
 	private void printTestCompileGoal() {
-		getLog().info("  test-compile: Compiles, archives and links test sources.");
-		getLog().info("                Code in <source>/test/cpp, along with headers in <source>/test/include, will be included in the build. <source> is controlled by the sources parameter.");
+		getLog().info("  test-compile:     Compiles, archives and links test sources.");
+		getLog().info("                    Code in <source>/test/cpp, along with headers in <source>/test/include, will be included in the build. <source> is controlled by the sources parameter.");
 		getLog().info("");
 
 		if( getDetail() ) {
@@ -168,6 +168,8 @@ public class HelpMojo extends AbstractHelpMojo {
 
 	private void printTestCompileParameters() {
 		getLog().info("    testExecutables: See \"executables\" in compile parameters.");
+		getLog().info("    skip:            Prevents compilation of test cases."); 
+		getLog().info("                     Also settable through the maven.test.skip system property."); 
 	}
 
 	private void printCompileParameters() {

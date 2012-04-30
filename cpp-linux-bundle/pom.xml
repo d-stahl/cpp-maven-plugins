@@ -2,13 +2,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>cpp-linux-bundle</artifactId>
-	<version>1.1.0-SNAPSHOT</version>
+	<version>1.1.0</version>
 	<packaging>jar</packaging>
 
 	<parent>
 		<groupId>com.ericsson.tools.cpp</groupId>
 		<artifactId>cpp-maven-plugins</artifactId>
-		<version>1.1.0-SNAPSHOT</version>
+		<version>1.1.0</version>
 	</parent>
 
 	<name>C/C++ Compiler Linux 32/64 Bundle</name>
@@ -18,7 +18,7 @@
 		<dependency>
 			<groupId>com.ericsson.tools.cpp</groupId>
 			<artifactId>cpp-compiler-maven-plugin</artifactId>
-			<version>1.1.0-SNAPSHOT</version>
+			<version>1.1.0</version>
 		</dependency>
 	</dependencies>
 </project>
